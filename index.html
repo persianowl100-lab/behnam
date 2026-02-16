@@ -3,823 +3,838 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>گالری طلا و جواهرات بهنام</title>
-    <!-- فونت‌های ایرانی -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/vazirmatn@5.0.8/index.min.css">
-    <!-- آیکون‌های فونت‌آوسام -->
+    <title>طراحی سایت حرفه‌ای | HTML | وردپرس</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Swiper برای اسلاید -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;700;900&display=swap" rel="stylesheet">
     <style>
-        /* استایل کلی */
-        :root {
-            --primary-gold: #D4AF37;
-            --secondary-gold: #F4E4A6;
-            --dark-bg: #0A0A0A;
-            --light-bg: #F8F5F0;
-            --text-dark: #333333;
-            --text-light: #FFFFFF;
-            --accent-color: #B8860B;
-            --transition: all 0.3s ease;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Vazirmatn', sans-serif;
-            transition: var(--transition);
         }
-        
+
         body {
-            background-color: var(--light-bg);
-            color: var(--text-dark);
-            overflow-x: hidden;
-            padding-top: 80px; /* برای منوی ثابت */
+            font-family: 'Vazirmatn', sans-serif;
+            background: #0a0f1e;
+            color: #fff;
+            line-height: 1.6;
         }
-        
-        body.en {
-            direction: ltr;
-            text-align: left;
+
+        /* ===== انیمیشن‌های پیشرفته ===== */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
         }
-        
-        /* زبان‌ها */
-        .language-switcher {
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.7); }
+            100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes rotate3d {
+            0% { transform: perspective(1000px) rotateY(0deg); }
+            100% { transform: perspective(1000px) rotateY(360deg); }
+        }
+
+        /* ===== صفحه انتخاب زبان با دیزاین نئون ===== */
+        .lang-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, #1a1f35, #0a0f1e);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .lang-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.8);
+        }
+
+        .lang-container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 60px;
+            padding: 4rem;
+            text-align: center;
+            animation: glow 3s infinite;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lang-title {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .lang-btn {
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border: none;
+            color: #0a0f1e;
+            padding: 20px 50px;
+            margin: 15px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lang-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .lang-btn:hover::before {
+            left: 100%;
+        }
+
+        .lang-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.4);
+        }
+
+        /* ===== دکمه تغییر زبان ===== */
+        .lang-toggle {
             position: fixed;
             top: 20px;
             left: 20px;
-            z-index: 1001;
-            display: flex;
-            background: rgba(10, 10, 10, 0.9);
-            border-radius: 30px;
-            padding: 5px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--primary-gold);
+            z-index: 9999;
         }
-        
-        .lang-btn {
-            background: transparent;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
+
+        .toggle-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
-        
-        .lang-btn.active {
-            background: var(--primary-gold);
-            color: var(--dark-bg);
+
+        .toggle-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
         }
-        
-        /* منو */
-        .main-nav {
-            position: fixed;
-            top: 0;
-            right: 0;
-            left: 0;
-            background: rgba(10, 10, 10, 0.95);
-            z-index: 1000;
-            padding: 15px 0;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            border-bottom: 2px solid var(--primary-gold);
-        }
-        
-        .nav-container {
+
+        /* ===== هدر سه‌بعدی ===== */
+        .header-3d {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.3) blur(5px);
+            transform: scale(1.1);
+            animation: float 20s infinite;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            transform-style: preserve-3d;
+            animation: rotate3d 30s infinite linear;
+        }
+
+        .header-title {
+            font-size: 5rem;
+            font-weight: 900;
+            text-shadow: 0 0 30px cyan, 0 0 60px magenta;
+            margin-bottom: 1rem;
+            transform: translateZ(50px);
+        }
+
+        .header-subtitle {
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        /* ===== کارت‌های سه‌بعدی ===== */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-3d {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 30px;
+            transform-style: preserve-3d;
+            transition: all 0.5s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-20px) rotateX(5deg) rotateY(5deg);
+            border-color: cyan;
+            box-shadow: 0 30px 50px rgba(0, 255, 255, 0.3);
+        }
+
+        .card-3d::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            border-radius: 30px;
+            transform: translateZ(-10px);
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: cyan;
+            text-shadow: 0 0 20px magenta;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, cyan, magenta);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== اسلایدر پیشرفته ===== */
+        .slider-section {
+            padding: 50px;
+            background: linear-gradient(135deg, #0a0f1e, #1a1f35);
+        }
+
+        .slider-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            position: relative;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
         }
-        
-        .nav-logo {
-            color: var(--primary-gold);
-            font-size: 1.8rem;
-            font-weight: 700;
-            text-decoration: none;
+
+        .slider {
+            display: flex;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            filter: brightness(0.7);
+            transition: all 0.8s;
+        }
+
+        .slide:hover img {
+            filter: brightness(1) contrast(1.2);
+            transform: scale(1.05);
+        }
+
+        .slide-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 50px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            transform: translateY(100%);
+            transition: transform 0.5s;
+        }
+
+        .slide:hover .slide-info {
+            transform: translateY(0);
+        }
+
+        .slide-info h3 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: cyan;
+            text-shadow: 0 0 20px magenta;
+        }
+
+        .slide-info p {
+            font-size: 1.3rem;
+            color: white;
+        }
+
+        /* ===== کنترل‌های اسلایدر ===== */
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+        }
+
+        .slider-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 3px solid cyan;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px cyan;
+        }
+
+        .slider-btn:hover {
+            background: cyan;
+            color: #0a0f1e;
+            transform: scale(1.2);
+            box-shadow: 0 0 50px cyan;
+        }
+
+        /* ===== داکت‌های اسلایدر با رنگ ثابت و درخشان ===== */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: cyan;
+            opacity: 0.3;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 0 20px cyan;
+        }
+
+        .dot.active {
+            opacity: 1;
+            transform: scale(1.3);
+            background: magenta;
+            box-shadow: 0 0 30px magenta;
+        }
+
+        /* ===== پکیج‌های قیمت ===== */
+        .pricing-section {
+            padding: 80px 50px;
+            background: radial-gradient(circle at 50% 50%, #1a1f35, #0a0f1e);
+        }
+
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 40px;
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-30px) scale(1.02);
+            border-color: magenta;
+            box-shadow: 0 50px 100px rgba(255, 0, 255, 0.3);
+        }
+
+        .pricing-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.8s;
+        }
+
+        .pricing-card:hover::after {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .pricing-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, cyan, magenta);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 900;
+            color: cyan;
+            text-shadow: 0 0 30px magenta;
+            margin: 20px 0;
+        }
+
+        .old-price {
+            font-size: 1.5rem;
+            text-decoration: line-through;
+            opacity: 0.5;
+            color: #ff6b6b;
+        }
+
+        .features-list {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .features-list li {
+            margin: 15px 0;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
-        .nav-logo i {
-            font-size: 1.5rem;
+
+        .features-list i {
+            color: cyan;
+            text-shadow: 0 0 10px magenta;
         }
-        
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-        
-        .nav-item {
-            position: relative;
-        }
-        
-        .nav-link {
-            color: var(--text-light);
+
+        .order-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, cyan, magenta);
+            color: #0a0f1e;
             text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 500;
-            padding: 8px 0;
-            position: relative;
-        }
-        
-        .nav-link:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            background: var(--primary-gold);
-            bottom: 0;
-            right: 0;
-            transition: width 0.3s ease;
-        }
-        
-        body.en .nav-link:after {
-            right: auto;
-            left: 0;
-        }
-        
-        .nav-link:hover:after, .nav-link.active:after {
-            width: 100%;
-        }
-        
-        .nav-link:hover {
-            color: var(--secondary-gold);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--primary-gold);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        /* هدر */
-        header {
-            background: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.7)), url('https://github.com/persianowl100-lab/behnam/blob/main/IMG-20260108-WA0064.jpg?raw=true');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-light);
-            text-align: center;
-            padding: 20px;
-            margin-top: -80px; /* برای جبران padding-top بدن */
-        }
-        
-        .logo {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            color: var(--primary-gold);
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-        }
-        
-        .tagline {
+            border-radius: 40px;
+            font-weight: 900;
             font-size: 1.2rem;
-            margin-bottom: 30px;
-            color: var(--secondary-gold);
-            max-width: 600px;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
-        
-        /* اسلایدر */
-        .gallery-section {
-            padding: 80px 20px;
-            background-color: var(--dark-bg);
+
+        .order-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px magenta;
         }
-        
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 50px;
-            color: var(--primary-gold);
-            position: relative;
-        }
-        
-        .section-title:after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 3px;
-            background-color: var(--primary-gold);
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        body.en .section-title:after {
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        .swiper {
-            width: 100%;
-            max-width: 1200px;
-            height: 500px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        .swiper-slide {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .swiper-slide:hover img {
-            transform: scale(1.05);
-        }
-        
-        .swiper-button-next, .swiper-button-prev {
-            color: var(--primary-gold) !important;
-        }
-        
-        .swiper-pagination-bullet-active {
-            background-color: var(--primary-gold) !important;
-        }
-        
-        /* جدول قیمت طلا (اگرrame) */
-        .price-section {
-            padding: 80px 20px;
-            background-color: var(--light-bg);
-        }
-        
-        .price-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            border-top: 5px solid var(--primary-gold);
-        }
-        
-        .iframe-wrapper {
-            width: 100%;
-            height: 382px;
-            overflow: hidden;
-            border: 0;
-        }
-        
-        /* بخش اطلاعات تماس */
+
+        /* ===== بخش تماس با دیزاین نئون ===== */
         .contact-section {
-            padding: 80px 20px;
-            background-color: var(--light-bg);
+            padding: 80px 50px;
+            text-align: center;
         }
-        
-        .contact-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 40px;
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 50px auto;
         }
-        
-        .contact-info {
-            flex: 1;
-            min-width: 300px;
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid var(--primary-gold);
-        }
-        
+
         .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            border-radius: 40px;
+            padding: 40px;
+            transition: all 0.3s;
         }
-        
-        .contact-item i {
-            background-color: var(--secondary-gold);
-            color: var(--accent-color);
-            width: 50px;
-            height: 50px;
+
+        .contact-item:hover {
+            border-color: magenta;
+            transform: scale(1.05);
+            box-shadow: 0 0 50px magenta;
+        }
+
+        .contact-icon {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
+            background: linear-gradient(45deg, cyan, magenta);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 15px;
-            font-size: 1.2rem;
+            font-size: 2.5rem;
+            margin: 0 auto 20px;
+            color: #0a0f1e;
         }
-        
-        body.en .contact-item i {
-            margin-left: 0;
-            margin-right: 15px;
+
+        .contact-item h3 {
+            font-size: 1.3rem;
+            color: cyan;
+            margin-bottom: 10px;
         }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--dark-bg);
+
+        .contact-item p, .contact-item a {
+            font-size: 1.3rem;
             color: white;
             text-decoration: none;
-            font-size: 1.3rem;
-            transition: var(--transition);
+            font-weight: 700;
         }
-        
-        .social-link:hover {
-            background-color: var(--primary-gold);
-            transform: translateY(-5px);
+
+        .contact-item a:hover {
+            color: magenta;
         }
-        
-        /* نقشه */
-        .map-container {
-            flex: 1;
-            min-width: 300px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            height: 400px;
-        }
-        
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        /* فوتر */
-        footer {
-            background-color: var(--dark-bg);
-            color: var(--text-light);
-            padding: 40px 20px;
+
+        /* ===== فوتر ===== */
+        .footer {
+            padding: 40px;
             text-align: center;
+            border-top: 2px solid rgba(0, 255, 255, 0.2);
+            margin-top: 50px;
         }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
+
+        .footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
         }
-        
-        .copyright {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--secondary-gold);
-            font-size: 0.9rem;
-        }
-        
-        /* ریسپانسیو */
-        @media (max-width: 992px) {
-            .nav-menu {
-                position: fixed;
-                top: 80px;
-                right: -100%;
-                flex-direction: column;
-                background-color: var(--dark-bg);
-                width: 100%;
-                text-align: center;
-                padding: 30px 0;
-                transition: 0.5s;
-                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
-                z-index: 999;
-            }
-            
-            .nav-menu.active {
-                right: 0;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .nav-item {
-                margin: 15px 0;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2.5rem;
-            }
-            
-            .swiper {
-                height: 350px;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .contact-info {
-                padding: 30px 20px;
-            }
-            
-            .iframe-wrapper {
-                height: 400px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 2rem;
-            }
-            
-            .swiper {
-                height: 250px;
-            }
-            
-            .language-switcher {
-                top: 10px;
-                left: 10px;
-            }
-            
-            .lang-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-            
-            .nav-logo span {
-                display: none;
-            }
-            
-            .nav-logo i {
-                font-size: 1.8rem;
-            }
-            
-            .iframe-wrapper {
-                height: 450px;
-            }
+
+        .footer span {
+            color: cyan;
+            text-shadow: 0 0 10px magenta;
         }
     </style>
 </head>
 <body>
-    <!-- منوی اصلی -->
-    <nav class="main-nav">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">
-                <i class="fas fa-gem"></i>
-                <span data-fa="گالری بهنام" data-en="Behnam Gallery">گالری بهنام</span>
-            </a>
-            
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <ul class="nav-menu" id="navMenu">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active" data-fa="خانه" data-en="Home">خانه</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#gallery" class="nav-link" data-fa="گالری" data-en="Gallery">گالری</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#prices" class="nav-link" data-fa="قیمت طلا" data-en="Gold Prices">قیمت طلا</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#shop" class="nav-link" data-fa="فروشگاه" data-en="Shop">فروشگاه</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#contact" class="nav-link" data-fa="تماس با ما" data-en="Contact">تماس با ما</a>
-                </li>
-            </ul>
+    <!-- صفحه انتخاب زبان -->
+    <div class="lang-overlay" id="langOverlay">
+        <div class="lang-container">
+            <h1 class="lang-title">به سایت ما خوش آمدید</h1>
+            <p style="color: white; font-size: 1.5rem; margin-bottom: 2rem;">لطفاً زبان خود را انتخاب کنید</p>
+            <button class="lang-btn" id="selectFarsi"><i class="fas fa-language"></i> فارسی</button>
+            <button class="lang-btn" id="selectEnglish"><i class="fas fa-globe"></i> English</button>
         </div>
-    </nav>
-
-    <!-- دکمه تغییر زبان -->
-    <div class="language-switcher">
-        <button class="lang-btn active" id="fa-btn">فارسی</button>
-        <button class="lang-btn" id="en-btn">English</button>
     </div>
 
-    <!-- هدر -->
-    <header>
-        <h1 class="logo">گالری طلا و جواهرات بهنام</h1>
-        <p class="tagline" data-fa="آفریننده دیجیتال" data-en="Digital Creator">آفریننده دیجیتال</p>
-        <p class="tagline" data-fa="طراحی و ساخت زیورآلات منحصر به فرد با هنر و دقت" data-en="Designing and crafting unique jewelry with art and precision">طراحی و ساخت زیورآلات منحصر به فرد با هنر و دقت</p>
-    </header>
+    <!-- محتوای اصلی -->
+    <div class="main-content" id="mainContent" style="display: none;">
+        <!-- دکمه تغییر زبان -->
+        <div class="lang-toggle">
+            <button class="toggle-btn" id="toggleLang"><i class="fas fa-globe"></i> <span id="langText">English</span></button>
+        </div>
 
-    <!-- گالری اسلاید -->
-    <section class="gallery-section" id="gallery">
-        <h2 class="section-title" data-fa="گالری آثار ما" data-en="Our Collection">گالری آثار ما</h2>
-        <div class="swiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <img src="https://github.com/persianowl100-lab/behnam/blob/main/IMG-20260108-WA0064.jpg?raw=true" alt="طلا و جواهرات بهنام">
+        <!-- محتوای فارسی -->
+        <div id="farsiContent">
+            <!-- هدر سه‌بعدی -->
+            <header class="header-3d">
+                <div class="header-bg"></div>
+                <div class="header-content">
+                    <h1 class="header-title">HTML vs وردپرس</h1>
+                    <p class="header-subtitle">کدام برای کسب‌وکار شما بهتر است؟</p>
                 </div>
-                <div class="swiper-slide">
-                    <img src="https://github.com/persianowl100-lab/behnam/blob/main/IMG-20260108-WA0102.jpg?raw=true" alt="جواهرات دست‌ساز بهنام">
+            </header>
+
+            <!-- کارت‌های سه‌بعدی مزایا -->
+            <div class="cards-container">
+                <div class="card-3d">
+                    <div class="card-icon"><i class="fas fa-bolt"></i></div>
+                    <h2 class="card-title">سرعت باورنکردنی</h2>
+                    <p style="color: rgba(255,255,255,0.8);">سایت‌های HTML ۵ برابر سریع‌تر از وردپرس هستند</p>
                 </div>
-                <div class="swiper-slide">
-                    <img src="https://github.com/persianowl100-lab/behnam/blob/main/IMG-20260108-WA0112.jpg?raw=true" alt="انگشتر طلا بهنام">
+                <div class="card-3d">
+                    <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h2 class="card-title">امنیت مطلق</h2>
+                    <p style="color: rgba(255,255,255,0.8);">بدون نقطه ضعف، بدون نگرانی</p>
                 </div>
-                <div class="swiper-slide">
-                    <img src="https://github.com/persianowl100-lab/behnam/blob/main/IMG-20260108-WA0114.jpg?raw=true" alt="گردنبند الماس بهنام">
+                <div class="card-3d">
+                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h2 class="card-title">سئو عالی</h2>
+                    <p style="color: rgba(255,255,255,0.8);">رتبه یک در گوگل با کدنویسی تمیز</p>
                 </div>
-                <div class="swiper-slide">
-                    <img src="https://github.com/persianowl100-lab/behnam/blob/main/IMG-20260108-WA0160.jpg?raw=true" alt="دست‌بند طلا بهنام">
+                <div class="card-3d">
+                    <div class="card-icon"><i class="fas fa-wallet"></i></div>
+                    <h2 class="card-title">صرفه‌جویی</h2>
+                    <p style="color: rgba(255,255,255,0.8);">تا ۷۰٪ کاهش هزینه‌ها</p>
                 </div>
             </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-        </div>
-    </section>
 
-    <!-- جدول قیمت طلا - نسخه زنده از tala.ir -->
-    <section class="price-section" id="prices">
-        <h2 class="section-title" data-fa="قیمت لحظه‌ای طلا و ارز" data-en="Live Gold & Currency Prices">قیمت لحظه‌ای طلا و ارز</h2>
-        
-        <div class="price-container">
-            <div class="iframe-wrapper">
-                <iframe style="width:100%;border:0;height:382px" src="https://www.tala.ir/webservice/price_live.php?new=1&bg=f0f4f6&upc=196900&dc=FF0000&obc=f9f9f9&oc=09334d&ebc=ffffff&ec=09334d&hbc=09334d&hc=ffffff&fs=13"></iframe>
-            </div>
-        </div>
-        
-        <div style="text-align: center; margin-top: 25px; color: #666; font-size: 0.9rem;">
-            <p data-fa="قیمت‌ها به صورت لحظه‌ای از منبع معتبر دریافت می‌شوند" data-en="Prices are updated in real-time from reliable sources">قیمت‌ها به صورت لحظه‌ای از منبع معتبر دریافت می‌شوند</p>
-        </div>
-    </section>
-
-    <!-- بخش فروشگاه (نمادین) -->
-    <section class="gallery-section" id="shop" style="background-color: var(--light-bg);">
-        <h2 class="section-title" style="color: var(--dark-bg);" data-fa="فروشگاه آنلاین" data-en="Online Shop">فروشگاه آنلاین</h2>
-        <div style="text-align: center; max-width: 800px; margin: 0 auto; padding: 0 20px;">
-            <p style="font-size: 1.2rem; margin-bottom: 40px; line-height: 1.8;" data-fa="برای مشاهده محصولات و خرید آنلاین از طریق لینک‌های زیر اقدام کنید. امکان خرید از طریق اینستاگرام و واتساپ فراهم است." data-en="To view products and shop online, use the links below. Shopping via Instagram and WhatsApp is available.">برای مشاهده محصولات و خرید آنلاین از طریق لینک‌های زیر اقدام کنید. امکان خرید از طریق اینستاگرام و واتساپ فراهم است.</p>
-            
-            <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-top: 40px;">
-                <a href="#" style="display: inline-flex; align-items: center; gap: 10px; background-color: var(--dark-bg); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
-                    <i class="fab fa-instagram" style="font-size: 1.5rem;"></i>
-                    <span data-fa="مشاهده در اینستاگرام" data-en="View on Instagram">مشاهده در اینستاگرام</span>
-                </a>
-                <a href="#" style="display: inline-flex; align-items: center; gap: 10px; background-color: #25D366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
-                    <i class="fab fa-whatsapp" style="font-size: 1.5rem;"></i>
-                    <span data-fa="خرید از واتساپ" data-en="Buy on WhatsApp">خرید از واتساپ</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- اطلاعات تماس و نقشه -->
-    <section class="contact-section" id="contact">
-        <h2 class="section-title" data-fa="تماس با ما" data-en="Contact Us">تماس با ما</h2>
-        <div class="contact-container">
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fas fa-user-tie"></i>
-                    <div>
-                        <strong data-fa="مدیریت:" data-en="Manager:">مدیریت:</strong>
-                        <span id="manager-text">کهزاد</span>
+            <!-- اسلایدر با ۴ اسلاید -->
+            <section class="slider-section">
+                <h2 style="text-align: center; font-size: 3rem; margin-bottom: 3rem; background: linear-gradient(45deg, cyan, magenta); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">نمونه کارهای ویژه</h2>
+                <div class="slider-container">
+                    <div class="slider" id="slider">
+                        <!-- اسلاید 1 -->
+                        <div class="slide">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1350" alt="سایت شرکتی">
+                            <div class="slide-info">
+                                <h3>سایت شرکتی HTML</h3>
+                                <p>طراحی مدرن و بهینه</p>
+                            </div>
+                        </div>
+                        <!-- اسلاید 2: گالری بهنام با لینک -->
+                        <div class="slide" onclick="window.open('https://behnamgallery.ir/', '_blank')">
+                            <img src="https://github.com/persianowl100-lab/behnam/blob/main/cover.png?raw=true" alt="گالری بهنام">
+                            <div class="slide-info">
+                                <h3>✨ گالری بهنام ✨</h3>
+                                <p>کلیک کنید - نمونه کار اختصاصی</p>
+                            </div>
+                        </div>
+                        <!-- اسلاید 3 -->
+                        <div class="slide">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1350" alt="فروشگاهی">
+                            <div class="slide-info">
+                                <h3>فروشگاه وردپرس</h3>
+                                <p>پنل مدیریت پیشرفته</p>
+                            </div>
+                        </div>
+                        <!-- اسلاید 4 -->
+                        <div class="slide">
+                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1350" alt="پزشکی">
+                            <div class="slide-info">
+                                <h3>سایت پزشکی HTML</h3>
+                                <p>امنیت و سرعت بالا</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-controls">
+                        <button class="slider-btn" id="prevBtn"><i class="fas fa-chevron-right"></i></button>
+                        <button class="slider-btn" id="nextBtn"><i class="fas fa-chevron-left"></i></button>
                     </div>
                 </div>
-                
-                <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <div>
-                        <strong data-fa="شماره تماس:" data-en="Phone:">شماره تماس:</strong>
-                        <span id="phone-text">۰۹۱۶۳۱۸۳۶۸۰</span>
-                    </div>
-                </div>
-                
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div>
-                        <strong data-fa="آدرس:" data-en="Address:">آدرس:</strong>
-                        <span id="address-text">کیانپارس نبش خیابان ۲ شرقی مجتمع تشریفات طبقه یک</span>
-                    </div>
-                </div>
-                
-                <div class="contact-item">
-                    <i class="fas fa-shopping-cart"></i>
-                    <div>
-                        <strong data-fa="سفارش آنلاین:" data-en="Online Order:">سفارش آنلاین:</strong>
-                        <span data-fa="از طریق اینستاگرام و واتساپ" data-en="Via Instagram and WhatsApp">از طریق اینستاگرام و واتساپ</span>
-                    </div>
-                </div>
-                
-                <div class="social-links">
-                    <a href="#" class="social-link" title="اینستاگرام">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-link" title="واتساپ">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <a href="#" class="social-link" title="تلگرام">
-                        <i class="fab fa-telegram"></i>
-                    </a>
-                    <a href="#" class="social-link" title="توییتر">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1345.9659962767292!2d48.80474127740552!3d31.298145374527854!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3fdd4bb72854d059%3A0xab7ac1b2630d811a!2sKianpars%2C%20Ahvaz%2C%20Khuzestan%20Province%2C%20Iran!5e0!3m2!1sen!2s!4v1688117453223!5m2!1sen!2s" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </div>
-    </section>
+                <div class="slider-dots" id="sliderDots"></div>
+            </section>
 
-    <!-- فوتر -->
-    <footer>
-        <div class="footer-content">
-            <h3 style="color: var(--primary-gold); margin-bottom: 20px;" data-fa="گالری طلا و جواهرات بهنام" data-en="Behnam Gold & Jewelry Gallery">گالری طلا و جواهرات بهنام</h3>
-            <p data-fa="طراحی و ساخت زیورآلات طلا و جواهرات با بالاترین کیفیت و استانداردهای بین‌المللی" data-en="Design and manufacture of gold and jewelry with the highest quality and international standards">طراحی و ساخت زیورآلات طلا و جواهرات با بالاترین کیفیت و استانداردهای بین‌المللی</p>
-            <div class="copyright">
-                <p data-fa="تمامی حقوق محفوظ است © ۱۴۰۲" data-en="All rights reserved © 2023">تمامی حقوق محفوظ است © ۱۴۰۲</p>
-            </div>
-        </div>
-    </footer>
+            <!-- پکیج‌های قیمت -->
+            <section class="pricing-section">
+                <h2 style="text-align: center; font-size: 3rem; margin-bottom: 3rem; background: linear-gradient(45deg, cyan, magenta); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">پکیج‌های طراحی</h2>
+                <div class="pricing-container">
+                    <div class="pricing-card">
+                        <h2 class="pricing-title">پکیج طلایی HTML</h2>
+                        <div class="old-price">۳,۵۰۰,۰۰۰ تومان</div>
+                        <div class="price">۲,۴۰۰,۰۰۰ تومان</div>
+                        <div style="background: magenta; color: white; padding: 5px 15px; border-radius: 30px; display: inline-block; margin: 10px 0;">۳۰٪ تخفیف</div>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check-circle"></i> طراحی استاتیک حرفه‌ای</li>
+                            <li><i class="fas fa-check-circle"></i> سرعت زیر ۲ ثانیه</li>
+                            <li><i class="fas fa-check-circle"></i> امنیت مطلق</li>
+                            <li><i class="fas fa-check-circle"></i> سئو پیشرفته</li>
+                            <li><i class="fas fa-check-circle"></i> پشتیبانی ۱۲ ماهه</li>
+                        </ul>
+                        <a href="https://wa.me/message/LWR4A75TNC3OJ1" class="order-btn"><i class="fab fa-whatsapp"></i> سفارش</a>
+                    </div>
+                    <div class="pricing-card">
+                        <h2 class="pricing-title">پکیج نقره‌ای وردپرس</h2>
+                        <div class="old-price">۵,۹۰۰,۰۰۰ تومان</div>
+                        <div class="price">۴,۲۰۰,۰۰۰ تومان</div>
+                        <div style="background: magenta; color: white; padding: 5px 15px; border-radius: 30px; display: inline-block; margin: 10px 0;">۲۵٪ تخفیف</div>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check-circle"></i> طراحی داینامیک</li>
+                            <li><i class="fas fa-check-circle"></i> پنل مدیریت</li>
+                            <li><i class="fas fa-check-circle"></i> فروشگاه اینترنتی</li>
+                            <li><i class="fas fa-check-circle"></i> افزونه‌های پیشرفته</li>
+                            <li><i class="fas fa-check-circle"></i> پشتیبانی ۶ ماهه</li>
+                        </ul>
+                        <a href="https://wa.me/message/LWR4A75TNC3OJ1" class="order-btn"><i class="fab fa-whatsapp"></i> سفارش</a>
+                    </div>
+                </div>
+            </section>
 
-    <!-- اسکریپت‌ها -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+            <!-- بخش تماس -->
+            <section class="contact-section">
+                <h2 style="font-size: 3rem; background: linear-gradient(45deg, cyan, magenta); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">مشاوره رایگان</h2>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <h3>تلفن تماس</h3>
+                        <p>۰۹۱۸۴۷۳۷۲۰۱</p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fab fa-telegram"></i></div>
+                        <h3>تلگرام</h3>
+                        <a href="https://t.me/razi360_admin">@razi360_admin</a>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+                        <h3>واتساپ</h3>
+                        <a href="https://wa.me/message/LWR4A75TNC3OJ1">ارسال پیام</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- فوتر -->
+            <footer class="footer">
+                <p>طراحی شده با <span>❤️</span> توسط تیم حرفه‌ای</p>
+                <p style="margin-top: 10px; font-size: 1rem;">پیشنهاد ویژه: با HTML شروع کنید، در صورت نیاز به وردپرس ارتقا دهید</p>
+            </footer>
+        </div>
+
+        <!-- محتوای انگلیسی (مختصر) -->
+        <div id="englishContent" style="display: none;">
+            <!-- همان ساختار با متن انگلیسی -->
+        </div>
+    </div>
+
     <script>
-        // اسلایدر
-        const swiper = new Swiper('.swiper', {
-            direction: 'horizontal',
-            loop: true,
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            breakpoints: {
-                640: {
-                    slidesPerView: 1,
-                    spaceBetween: 10,
-                },
-                768: {
-                    slidesPerView: 1,
-                    spaceBetween: 20,
-                },
-                1024: {
-                    slidesPerView: 1,
-                    spaceBetween: 30,
-                },
-            }
+        // مدیریت زبان
+        const overlay = document.getElementById('langOverlay');
+        const mainContent = document.getElementById('mainContent');
+        const farsiBtn = document.getElementById('selectFarsi');
+        const englishBtn = document.getElementById('selectEnglish');
+        const toggleBtn = document.getElementById('toggleLang');
+        const langText = document.getElementById('langText');
+        const farsiContent = document.getElementById('farsiContent');
+        const englishContent = document.getElementById('englishContent');
+
+        let isEnglish = false;
+
+        farsiBtn.addEventListener('click', () => {
+            overlay.classList.add('hidden');
+            mainContent.style.display = 'block';
+            farsiContent.style.display = 'block';
+            englishContent.style.display = 'none';
+            document.documentElement.setAttribute('dir', 'rtl');
+            langText.textContent = 'English';
+            isEnglish = false;
+            initSlider();
         });
 
-        // منوی موبایل
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navMenu = document.getElementById('navMenu');
-        
-        mobileMenuBtn.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-            const icon = mobileMenuBtn.querySelector('i');
-            if (navMenu.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
+        englishBtn.addEventListener('click', () => {
+            overlay.classList.add('hidden');
+            mainContent.style.display = 'block';
+            farsiContent.style.display = 'none';
+            englishContent.style.display = 'block';
+            document.documentElement.setAttribute('dir', 'ltr');
+            langText.textContent = 'فارسی';
+            isEnglish = true;
+            initSlider();
         });
-        
-        // بستن منو هنگام کلیک روی لینک
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function() {
-                navMenu.classList.remove('active');
-                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
-                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
-                
-                // فعال کردن لینک انتخاب شده
-                document.querySelectorAll('.nav-link').forEach(item => {
-                    item.classList.remove('active');
+
+        toggleBtn.addEventListener('click', () => {
+            if (isEnglish) {
+                farsiContent.style.display = 'block';
+                englishContent.style.display = 'none';
+                document.documentElement.setAttribute('dir', 'rtl');
+                langText.textContent = 'English';
+            } else {
+                farsiContent.style.display = 'none';
+                englishContent.style.display = 'block';
+                document.documentElement.setAttribute('dir', 'ltr');
+                langText.textContent = 'فارسی';
+            }
+            isEnglish = !isEnglish;
+            initSlider();
+        });
+
+        // اسلایدر با 4 اسلاید
+        let currentSlide = 0;
+        const totalSlides = 4;
+        const slider = document.getElementById('slider');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('sliderDots');
+
+        function updateSlider() {
+            if (slider) {
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+                const dots = document.querySelectorAll('.dot');
+                dots.forEach((dot, index) => {
+                    if (index === currentSlide) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
                 });
-                this.classList.add('active');
-            });
-        });
-        
-        // تغییر زبان
-        const faBtn = document.getElementById('fa-btn');
-        const enBtn = document.getElementById('en-btn');
-        const body = document.body;
-        
-        // اطلاعات به زبان انگلیسی
-        const englishData = {
-            manager: "Kehzad",
-            phone: "+98 916 318 3680",
-            address: "Kianpars, Corner of 2nd Eastern Street, Ceremonial Complex, Floor 1"
-        };
-        
-        // اطلاعات به زبان فارسی
-        const persianData = {
-            manager: "کهزاد",
-            phone: "۰۹۱۶۳۱۸۳۶۸۰",
-            address: "کیانپارس نبش خیابان ۲ شرقی مجتمع تشریفات طبقه یک"
-        };
-        
-        faBtn.addEventListener('click', function() {
-            body.classList.remove('en');
-            body.dir = 'rtl';
-            faBtn.classList.add('active');
-            enBtn.classList.remove('active');
-            changeLanguage('fa');
-        });
-        
-        enBtn.addEventListener('click', function() {
-            body.classList.add('en');
-            body.dir = 'ltr';
-            enBtn.classList.add('active');
-            faBtn.classList.remove('active');
-            changeLanguage('en');
-        });
-        
-        function changeLanguage(lang) {
-            // تغییر متن المنت‌هایی که دارای data attribute هستند
-            document.querySelectorAll('[data-fa]').forEach(element => {
-                if (lang === 'fa') {
-                    element.textContent = element.getAttribute('data-fa');
-                } else {
-                    element.textContent = element.getAttribute('data-en');
-                }
-            });
-            
-            // تغییر اطلاعات تماس
-            if (lang === 'fa') {
-                document.getElementById('manager-text').textContent = persianData.manager;
-                document.getElementById('phone-text').textContent = persianData.phone;
-                document.getElementById('address-text').textContent = persianData.address;
-            } else {
-                document.getElementById('manager-text').textContent = englishData.manager;
-                document.getElementById('phone-text').textContent = englishData.phone;
-                document.getElementById('address-text').textContent = englishData.address;
             }
         }
-        
-        // ریسپانسیو کردن تصاویر اسلایدر
-        function adjustSwiperHeight() {
-            const swiperContainer = document.querySelector('.swiper');
-            if (window.innerWidth <= 768) {
-                swiperContainer.style.height = '350px';
-            } else if (window.innerWidth <= 480) {
-                swiperContainer.style.height = '250px';
-            } else {
-                swiperContainer.style.height = '500px';
-            }
-        }
-        
-        // اسکرول نرم برای منو
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
+
+        function initSlider() {
+            if (dotsContainer) {
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement('span');
+                    dot.className = 'dot';
+                    if (i === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => {
+                        currentSlide = i;
+                        updateSlider();
                     });
+                    dotsContainer.appendChild(dot);
                 }
-            });
-        });
-        
-        // تنظیم ارتفاع iframe برای ریسپانسیو
-        function adjustIframeHeight() {
-            const iframeWrapper = document.querySelector('.iframe-wrapper');
-            if (window.innerWidth <= 480) {
-                iframeWrapper.style.height = '450px';
-            } else if (window.innerWidth <= 768) {
-                iframeWrapper.style.height = '400px';
-            } else {
-                iframeWrapper.style.height = '382px';
             }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                    updateSlider();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    updateSlider();
+                });
+            }
+
+            updateSlider();
         }
-        
-        window.addEventListener('resize', adjustIframeHeight);
-        window.addEventListener('resize', adjustSwiperHeight);
-        adjustSwiperHeight();
-        adjustIframeHeight();
     </script>
 </body>
 </html>
